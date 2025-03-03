@@ -1,4 +1,4 @@
-# Professional Algorithm Example: Using Collections.binarySearch
+# Professional Algorithm Example
 
 This repository contains a professional example of using `Collections.binarySearch` with a custom object and comparator. The example demonstrates how to:
 
