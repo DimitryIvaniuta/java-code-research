@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -32,7 +33,8 @@ public class ExtractMapKeysAndValues {
                 "Machine Learning", List.of(
                         new PersonRecord("Eve", LocalDateTime.of(2024, Month.JANUARY, 20, 14, 0)),
                         new PersonRecord("Frank", LocalDateTime.of(2024, Month.FEBRUARY, 10, 11, 30))
-                )
+                ),
+                "Empty book", new ArrayList<>()
         );
 
         // 1. Map where key is book name, value is a List<String> personNames
@@ -58,7 +60,7 @@ public class ExtractMapKeysAndValues {
                         entry -> entry.getValue().stream()
                                 .map(PersonRecord::bookDateTimeWasBorrowed)
                                 .max(LocalDateTime::compareTo)
-                                .orElse(null)
+                                .orElseGet(() -> LocalDateTime.MIN) // Use LocalDateTime.MIN instead of null
                 ));
 
         // 4. Map where key is first time book was borrowed, value is person name who borrowed the book
