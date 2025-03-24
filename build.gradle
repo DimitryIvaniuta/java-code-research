@@ -54,6 +54,8 @@ dependencies {
 
     implementation 'org.hibernate.validator:hibernate-validator:8.0.2.Final'
 
+    implementation 'net.sourceforge.tess4j:tess4j:5.15.0'
+
     // Lombok
     compileOnly("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
