@@ -31,5 +31,7 @@ public class LFUCacheImplApplication {
         // Demonstrate updating an existing key.
         cache.put(3, "Cherry Updated");
         log.info("Get updated key 3: {}", cache.get(3)); // Expected "Cherry Updated"
+        cache.printCache();
     }
+
 }

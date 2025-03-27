@@ -1,7 +1,9 @@
 package com.code.research.datastructures.hash.lfucache;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 /**
@@ -11,7 +13,7 @@ import java.util.Map;
  * @param <K> the type of keys maintained by this cache
  * @param <V> the type of values stored in the cache
  */
-
+@Slf4j
 public class LFUCacheImpl<K, V> {
 
     private final int capacity;
@@ -20,7 +22,7 @@ public class LFUCacheImpl<K, V> {
 
     private final Map<K, NodeCache<K, V>> keyToNode;
 
-    private final Map<Integer, LinkedHashMap<K, NodeCache<K, V>>> freqToNodes;
+    private final Map<Integer, LinkedHashSet<NodeCache<K, V>>> freqToNodes;
 
     /**
      * Constructs an LFUCacheImpl with the specified capacity.
@@ -62,60 +64,73 @@ public class LFUCacheImpl<K, V> {
             return;
         }
         if (keyToNode.containsKey(key)) {
-            // Update the existing node's value and frequency.
             NodeCache<K, V> node = keyToNode.get(key);
             node.setValue(value);
             updateFrequency(node);
-        } else {
-            // Evict LFU element if capacity is reached.
-            if (keyToNode.size() >= capacity) {
-                evictLFU();
-            }
-            // Insert the new node.
-            NodeCache<K, V> newNode = new NodeCache<>(key, value);
-            keyToNode.put(key, newNode);
-            freqToNodes.computeIfAbsent(1, ignore -> new LinkedHashMap<>()).put(key, newNode);
-            minFreq = 1;
+            return;
         }
+        if (keyToNode.size() >= capacity) {
+            evictLFU();
+        }
+        NodeCache<K, V> newNode = new NodeCache<>(key, value);
+        keyToNode.put(key, newNode);
+        // Always initialize the set for frequency 1 if not present.
+        freqToNodes.computeIfAbsent(1, ignore -> new LinkedHashSet<>()).add(newNode);
+        minFreq = 1; // New node has frequency 1.
     }
 
     /**
-     * Updates the frequency of the specified node after an access.
-     * Moves the node from its current frequency list to the next frequency list.
+     * Updates the frequency of a given node.
      *
-     * @param node the node whose frequency is to be updated
+     * @param node The node whose frequency is to be updated.
      */
     private void updateFrequency(NodeCache<K, V> node) {
         int freq = node.getFreq();
-        LinkedHashMap<K, NodeCache<K, V>> nodesAtFreq = freqToNodes.get(freq);
-        nodesAtFreq.remove(node.getKey());
-
-        // Remove the frequency group if empty, and update minFreq if needed.
+        // Remove the node from the current frequency group.
+        LinkedHashSet<NodeCache<K, V>> nodesAtFreq = freqToNodes.get(freq);
+        if (nodesAtFreq == null) {
+            nodesAtFreq = new LinkedHashSet<>();
+        }
+        nodesAtFreq.remove(node);
+        // If the current frequency group is empty, remove it and update minFreq if needed.
         if (nodesAtFreq.isEmpty()) {
             freqToNodes.remove(freq);
             if (minFreq == freq) {
                 minFreq++;
             }
         }
-        // Increase node frequency.
+        // Increment the node's frequency.
         node.increaseFreq();
-        freqToNodes.computeIfAbsent(node.getFreq(), ignore -> new LinkedHashMap<>())
-                .put(node.getKey(), node);
+        // Add the node to the new frequency group, ensuring the set is initialized.
+        freqToNodes.computeIfAbsent(node.getFreq(), ignore -> new LinkedHashSet<>()).add(node);
     }
 
     /**
      * Evicts the least frequently used node from the cache.
-     * If multiple nodes have the same frequency, the least recently used one is removed.
      */
     private void evictLFU() {
-        LinkedHashMap<K, NodeCache<K, V>> nodesAtMinFreq = freqToNodes.get(minFreq);
-        // The first key in the LinkedHashMap is the least recently used.
-        K evictKey = nodesAtMinFreq.entrySet().iterator().next().getKey();
-        nodesAtMinFreq.remove(evictKey);
+        // Get the set of nodes with the minimum frequency.
+        LinkedHashSet<NodeCache<K, V>> nodesAtMinFreq = freqToNodes.get(minFreq);
+        if (nodesAtMinFreq == null || nodesAtMinFreq.isEmpty()) {
+            return; // This should not happen if the cache is non-empty.
+        }
+        // Evict the first node inserted (FIFO order) in the min frequency set.
+        NodeCache<K, V> nodeToEvict = nodesAtMinFreq.getFirst();
+        nodesAtMinFreq.remove(nodeToEvict);
         if (nodesAtMinFreq.isEmpty()) {
             freqToNodes.remove(minFreq);
         }
-        keyToNode.remove(evictKey);
+        keyToNode.remove(nodeToEvict.getKey());
     }
 
+    /**
+     * For debugging: Prints the current cache content.
+     */
+    public void printCache() {
+        log.info("Cache contents:");
+        for (Map.Entry<K, NodeCache<K, V>> entry : keyToNode.entrySet()) {
+            NodeCache<K, V> node = entry.getValue();
+            log.info("Key: {}, Value: {}, Frequency: {}", node.getKey(), node.getValue(), node.getFreq());
+        }
+    }
 }
