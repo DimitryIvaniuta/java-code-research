@@ -71,7 +71,7 @@ public class LongestConsecutiveSequence {
      */
     public static void main(String[] args) {
         LongestConsecutiveSequence solution = new LongestConsecutiveSequence();
-        int[] nums = {100, 4, 200, 1, 3, 2};
+        int[] nums = {100, 4, 200, 10, 1, 7, 2, 3, 8, 9};
         int result = solution.longestConsecutive(nums);
         log.info("Longest consecutive sequence length: {}", result);
         // Expected output: 4
