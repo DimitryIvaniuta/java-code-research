@@ -2,7 +2,10 @@ package com.code.research.datastructures.hash;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,44 +28,56 @@ import java.util.Map;
 public class LongestConsecutiveSequence {
 
     /**
-     * Returns the length of the longest consecutive sequence in the given array.
+     * Finds and returns the longest consecutive sequence from the given array.
      *
-     * @param nums an array of integers (unsorted)
-     * @return the length of the longest consecutive sequence
+     * @param nums an array of unsorted integers
+     * @return a list of integers representing the longest consecutive sequence;
+     *         if the array is empty, returns an empty list.
      */
-    public int longestConsecutive(int[] nums) {
+    public static List<Integer> getLongestConsecutiveSequence(int[] nums) {
         if (nums == null || nums.length == 0) {
-            return 0;
+            return Collections.emptyList();
         }
+
         // Map to store the sequence length for each number.
-        // For each processed number, the map stores the length of the sequence to which it belongs.
         Map<Integer, Integer> sequenceMap = new HashMap<>();
-        int longestStreak = 0;
+        int maxStreak = 0;
+        int maxStart = 0; // The starting value of the longest sequence.
 
         for (int num : nums) {
-            // If the number is already processed, skip it.
+            // Skip if the number is already processed.
             if (sequenceMap.containsKey(num)) {
                 continue;
             }
-            // Get the length of consecutive sequence ending at num-1 (to the left)
-            int left = sequenceMap.getOrDefault(num - 1, 0);
-            // Get the length of consecutive sequence starting at num+1 (to the right)
-            int right = sequenceMap.getOrDefault(num + 1, 0);
-            // The current number's sequence length is the sum of left, right, and the current number itself.
-            int currentStreak = left + right + 1;
-            // Update the current number's sequence length in the map.
-            sequenceMap.put(num, currentStreak);
 
-            // Update the boundaries of the sequence.
-            // The new sequence extends from (num - left) to (num + right).
+            // Get the lengths of consecutive sequences adjacent to num.
+            int left = sequenceMap.getOrDefault(num - 1, 0);
+            int right = sequenceMap.getOrDefault(num + 1, 0);
+
+            // The current sequence length including num.
+            int currentStreak = left + right + 1;
+
+            // Update the map for the current number.
+            sequenceMap.put(num, currentStreak);
+            // Update the boundary values of the sequence.
             sequenceMap.put(num - left, currentStreak);
             sequenceMap.put(num + right, currentStreak);
 
-            // Update the maximum sequence length found.
-            longestStreak = Math.max(longestStreak, currentStreak);
+            // Update maximum sequence if needed.
+            if (currentStreak > maxStreak) {
+                maxStreak = currentStreak;
+                maxStart = num - left; // Starting number of the current sequence.
+            }
         }
-        return longestStreak;
+
+        // Reconstruct the longest consecutive sequence.
+        List<Integer> longestSequence = new ArrayList<>();
+        for (int i = 0; i < maxStreak; i++) {
+            longestSequence.add(maxStart + i);
+        }
+        return longestSequence;
     }
+
 
     /**
      * Main method to demonstrate the longest consecutive sequence solution.
@@ -70,10 +85,8 @@ public class LongestConsecutiveSequence {
      * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
-        LongestConsecutiveSequence solution = new LongestConsecutiveSequence();
-        int[] nums = {100, 4, 200, 10, 1, 7, 2, 3, 8, 9};
-        int result = solution.longestConsecutive(nums);
-        log.info("Longest consecutive sequence length: {}", result);
-        // Expected output: 4
+        int[] nums = {100, 4, 200, 10, 1, 7, 2, 3, 8, 9, 11, 12};
+        List<Integer> longestSequence = getLongestConsecutiveSequence(nums);
+        log.info("Longest consecutive sequence: {}", longestSequence);
     }
 }
