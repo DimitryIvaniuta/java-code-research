@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 
@@ -19,6 +18,9 @@ public class CalendarEventAddRulesToCalendar implements CalendarEventAddRules {
 
     List<CalendarEventIntersectRules> intersectRules;
 
+    /**
+     * Constructs a CalendarEventAddRulesToCalendar instance with predefined intersection rules.
+     */
     public CalendarEventAddRulesToCalendar() {
         intersectRules = List.of(
                 new CalendarEventIntersectEquals(),
@@ -27,18 +29,26 @@ public class CalendarEventAddRulesToCalendar implements CalendarEventAddRules {
         );
     }
 
+    /**
+     * Validates the given calendar event by ensuring it does not conflict with any existing events
+     * on the same day, as determined by the defined intersection rules.
+     *
+     * @param eventToValidate the event to validate
+     * @param eventSortedMap  a sorted map with keys as event dates and values as lists of calendar events for that day
+     * @return {@code true} if the event is valid (i.e., no conflicts), {@code false} otherwise
+     */
     @Override
     public boolean validate(final CalendarEvent eventToValidate,
                             final SortedMap<LocalDate, List<CalendarEvent>> eventSortedMap) {
-        boolean valid = true;
-        List<CalendarEvent> currentDayEvents = eventSortedMap.getOrDefault(eventToValidate.start().toLocalDate(), new ArrayList<>());
-        for (CalendarEvent eventAssigned : currentDayEvents) {
-            if (valid) {
-                valid = intersectRules.stream().noneMatch(rule -> rule.validate(eventToValidate, eventAssigned));
-            }
-        }
-        log.info("Event validate: {}", valid);
-        return valid;
+        // Retrieve events scheduled on the same day as the event to validate.
+        List<CalendarEvent> currentDayEvents = eventSortedMap
+                .getOrDefault(eventToValidate.start().toLocalDate(), List.of());
+
+        // The event is valid if none of the current day's events cause a conflict.
+        return currentDayEvents.stream()
+                .noneMatch(eventAssigned ->
+                        intersectRules.stream().anyMatch(rule -> rule.validate(eventToValidate, eventAssigned))
+                );
     }
 
 }

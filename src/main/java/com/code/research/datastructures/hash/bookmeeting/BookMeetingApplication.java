@@ -18,7 +18,7 @@ public class BookMeetingApplication {
                 ZonedDateTime.of(2005, 12, 2, 13, 0, 0, 0, ZoneId.of("UTC")),
                 ZonedDateTime.of(2005, 12, 2, 13, 30, 0, 0, ZoneId.of("UTC"))
         );
-        log.info("Add event: {}:{}", event, calendarEventService.addEvent(event));
+        log.info("\nAdd event: {}:{}", event, calendarEventService.addEvent(event));
         event = new CalendarEvent(
                 ZonedDateTime.of(2005, 12, 2, 12, 0, 0, 0, ZoneId.of("UTC")),
                 ZonedDateTime.of(2005, 12, 2, 13, 15, 0, 0, ZoneId.of("UTC"))
@@ -32,6 +32,16 @@ public class BookMeetingApplication {
         event = new CalendarEvent(
                 ZonedDateTime.of(2005, 12, 2, 15, 0, 0, 0, ZoneId.of("UTC")),
                 ZonedDateTime.of(2005, 12, 2, 16, 15, 0, 0, ZoneId.of("UTC"))
+        );
+        log.info("Add event: {}:{}", event, calendarEventService.addEvent(event));
+        event = new CalendarEvent(
+                ZonedDateTime.of(2005, 12, 2, 17, 0, 0, 0, ZoneId.of("UTC")),
+                ZonedDateTime.of(2005, 12, 2, 18, 0, 0, 0, ZoneId.of("UTC"))
+        );
+        log.info("Add event: {}:{}", event, calendarEventService.addEvent(event));
+        event = new CalendarEvent(
+                ZonedDateTime.of(2005, 12, 2, 16, 30, 0, 0, ZoneId.of("UTC")),
+                ZonedDateTime.of(2005, 12, 2, 16, 55, 0, 0, ZoneId.of("UTC"))
         );
         log.info("Add event: {}:{}", event, calendarEventService.addEvent(event));
         SortedMap<LocalDate, List<CalendarEvent>> allEvents = calendarEventService.getAllEvents();
