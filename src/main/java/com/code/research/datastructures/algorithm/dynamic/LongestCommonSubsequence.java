@@ -60,7 +60,7 @@ public class LongestCommonSubsequence {
                 } else {
                     j--;
                 }
-            
+
         }
         // The LCS is built backwards, so reverse it.
         return lcs.reverse().toString();
