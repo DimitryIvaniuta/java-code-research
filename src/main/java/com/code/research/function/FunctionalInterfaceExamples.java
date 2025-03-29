@@ -2,10 +2,13 @@ package com.code.research.function;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.IntBinaryOperator;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class FunctionalInterfaceExamples {
@@ -22,7 +25,7 @@ public class FunctionalInterfaceExamples {
         log.info("Repeated String: {}", repeated);
 
         // 3. UnaryOperator<String>: Trim a string and convert it to uppercase.
-        UnaryOperator<String> transform = str -> str.trim().toUpperCase();
+        UnaryOperator<String> transform = str -> str.trim().toUpperCase() + "!";
         String transformed = transform.apply("   hello world   ");
         log.info("Transformed String: {}", transformed);
 
@@ -30,6 +33,10 @@ public class FunctionalInterfaceExamples {
         BinaryOperator<String> concatenate = (s1, s2) -> s1 + " " + s2;
         String concatenated = concatenate.apply("Hello", "World");
         log.info("Concatenated String: {}", concatenated);
+
+        List<String> names = List.of("string1 ", "string2 ", "string3 ");
+        String result = names.stream().map(transform).collect(Collectors.joining(", "));
+        log.info("Result: {}", result);
     }
 
 }
