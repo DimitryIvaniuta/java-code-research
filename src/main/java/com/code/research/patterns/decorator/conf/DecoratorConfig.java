@@ -1,4 +1,4 @@
-package com.code.research.decorator.conf;
+package com.code.research.patterns.decorator.conf;
 
 import com.code.research.service.messagedecorator.BaseMessageService;
 import com.code.research.service.messagedecorator.MessageService;
