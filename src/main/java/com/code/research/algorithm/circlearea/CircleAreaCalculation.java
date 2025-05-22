@@ -2,11 +2,17 @@ package com.code.research.algorithm.circlearea;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Slf4j
-public class CircleAreaCalculation {
+public class CircleAreaCalculation<E> {
 
     public static void main(String[] args) {
         try {
+
             double x1 = 1;
             double y1 = 2;
             double x2 = 3;
