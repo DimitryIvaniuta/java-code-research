@@ -17,7 +17,7 @@ public class FlightApp {
                 new Flight("KTW", "POZ", "2025-03-10", "15:30", "2025-03-10", "23:00")
         );
 
-        boolean exists = FlightUtil.isFlightExist(flights);
+        boolean exists = FlightUtil.isFlightExist(flights, 45);
         log.info("Is there a valid connection? {}", exists);
     }
 }
