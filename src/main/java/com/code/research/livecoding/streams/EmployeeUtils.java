@@ -4,18 +4,18 @@ import java.util.List;
 
 public class EmployeeUtils {
 
-    private static List<String> getEmailsOfEmployeesOlderThan30(List<Employee> employees){
+    private static List<String> getEmailsOfEmployeesOlderThan30(List<Employee> employees) {
         return employees.stream()
-                .filter(e->e.age()>30)
-                .map(e->e.name())
+                .filter(e -> e.age() > 30)
+                .map(Employee::name)
                 .toList();
     }
 
     public static void main(String[] args) {
         List<Employee> employees = List.of(
-                new Employee("alice@example.com", 28),
-                new Employee("bob@example.com", 35),
-                new Employee("carol@example.com", 42)
+                new Employee("alice@example.com", 28, 10000.0),
+                new Employee("bob@example.com", 35, 10000.0),
+                new Employee("carol@example.com", 42, 10000.0)
         );
 
         List<String> emails = getEmailsOfEmployeesOlderThan30(employees);

@@ -1,4 +1,4 @@
 package com.code.research.livecoding.streams;
 
-public record Employee(String name, int age) {
+public record Employee(String name, int age, double salary) {
 }
