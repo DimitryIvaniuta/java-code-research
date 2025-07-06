@@ -1,5 +1,7 @@
 package com.code.research.livecoding.streams;
 
+import com.code.research.livecoding.streams.dto.Employee;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
