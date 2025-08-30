@@ -1,8 +1,10 @@
 package com.code.research.livecoding.tasks;
 
+import lombok.extern.slf4j.Slf4j;
 import java.text.Normalizer;
 import java.util.*;
 
+@Slf4j
 public class AnagramsByCodePoint {
 
     public static List<List<String>> groupAnagramsByCodePoint(List<String> words) {
@@ -17,21 +19,15 @@ public class AnagramsByCodePoint {
             String key = normalizeKeyCodePoint(word);
             groups.computeIfAbsent(key, k -> new ArrayList<>()).add(word);
         }
-        System.out.println("Map groups: "+groups);
         return new ArrayList<>(groups.values());
     }
 
     public static String normalizeKeyCodePoint(String input) {
-        String inputLower = input.toLowerCase(Locale.ROOT);
-        int[] cps = inputLower.codePoints().sorted().toArray();
-        return new String(cps, 0, cps.length);
-    }
-
-    public static String normalizeKeyCodePoint2(String input) {
-        String nfc = Normalizer.normalize(input, Normalizer.Form.NFC).toLowerCase(Locale.ROOT);
+        String nfc = Normalizer.normalize(input, Normalizer.Form.NFC)
+                .toLowerCase(Locale.ROOT);
         int[] cps = nfc.codePoints().sorted().toArray();
         StringBuilder sb = new StringBuilder(cps.length);
-        for(int cp: cps){
+        for (int cp : cps) {
             sb.appendCodePoint(cp);
         }
         return sb.toString();
@@ -39,7 +35,7 @@ public class AnagramsByCodePoint {
 
     public static void main(String[] args) {
         List<String> in = List.of("eat", "tea", "tan", "ate", "nat", "bat", "a😀b", "b😀a");
-        System.out.println("Result lists: "+groupAnagramsByCodePoint(in));
+        log.info("Result lists: {}", groupAnagramsByCodePoint(in));
         // [[eat, tea, ate], [tan, nat], [bat], [a😀b, b😀a]]
     }
 }
