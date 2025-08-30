@@ -22,6 +22,12 @@ public class AnagramsByCodePoint {
         return new ArrayList<>(groups.values());
     }
 
+    public static String normalizeKeyCodePoint2(String input) {
+        String inputLower = input.toLowerCase(Locale.ROOT);
+        int[] cps = inputLower.codePoints().sorted().toArray();
+        return new String(cps, 0, cps.length);
+    }
+
     public static String normalizeKeyCodePoint(String input) {
         String nfc = Normalizer.normalize(input, Normalizer.Form.NFC)
                 .toLowerCase(Locale.ROOT);
