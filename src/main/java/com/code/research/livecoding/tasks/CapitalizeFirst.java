@@ -18,7 +18,7 @@ public class CapitalizeFirst {
         int i = input.offsetByCodePoints(0, 1);
         return new StringBuilder()
                 .appendCodePoint(Character.toUpperCase(input.codePointAt(0)))
-                .append(input.substring(1).toLowerCase(Locale.ROOT))
+                .append(input.substring(i).toLowerCase(Locale.ROOT))
                 .toString();
     }
 
