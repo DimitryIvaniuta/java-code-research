@@ -10,14 +10,25 @@ import java.util.*;
  */
 @Slf4j
 public class LinkedRegions {
-    static final int[][] DIRS = {{1,0},{-1,0},{0,1},{0,-1}}; // vertical & horizontal
+    static final int[][] DIRS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; // vertical & horizontal
+
     static final class Pos {
         final int r, c;
-        Pos(int r, int c) { this.r = r; this.c = c; }
-        @Override public String toString() { return "(" + r + "," + c + ")"; }
+
+        Pos(int r, int c) {
+            this.r = r;
+            this.c = c;
+        }
+
+        @Override
+        public String toString() {
+            return "(" + r + "," + c + ")";
+        }
     }
 
-    /** Finds regions of "1" (4-directional) and groups cells by a fresh UUID per region. */
+    /**
+     * Finds regions of "1" (4-directional) and groups cells by a fresh UUID per region.
+     */
     public static Map<UUID, List<Pos>> findRegions(String[][] grid) {
         if (grid == null || grid.length == 0) return Collections.emptyMap();
         int rows = grid.length, cols = grid[0].length;
