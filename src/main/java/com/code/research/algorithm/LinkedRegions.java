@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.UUID;
 import java.util.*;
 
+/**
+ * Recursive DFS that finds 4-connected regions (“1” cells) and groups each region under a UUID:
+ */
 @Slf4j
 public class LinkedRegions {
     static final int[][] DIRS = {{1,0},{-1,0},{0,1},{0,-1}}; // vertical & horizontal
@@ -43,9 +46,11 @@ public class LinkedRegions {
             }
         }
     }
+
     private static boolean inBounds(String[][] g, int r, int c) {
         return r >= 0 && r < g.length && c >= 0 && c < g[0].length;
     }
+
     public static void main(String[] args) {
         String[][] grid = {
                 {"1", "0", "1", "1", "0"},
