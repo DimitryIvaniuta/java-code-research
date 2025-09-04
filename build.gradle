@@ -4,81 +4,65 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group = 'org.example'
+version = '1.0-SNAPSHOT'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+    toolchain { languageVersion = JavaLanguageVersion.of(21) }
 }
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.maven.apache.org/maven2' }
-}
-
-test {
-    useJUnitPlatform()
 }
 
 dependencies {
     // Annotation Processor
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    // JUnit 5 API
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
-
-    // JUnit 5 Engine
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.4'
-
-    implementation 'com.auth0:java-jwt:4.5.0'
-
-    // Spring Boot Starter Web
+    // App deps
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    // Spring Boot Testing
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // Spring Boot Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    // Spring OAuth2 Client & Resource Server
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-    testImplementation 'org.springframework.security:spring-security-test'
-
-    // Jackson for JSON Serialization/Deserialization
+    implementation 'com.auth0:java-jwt:4.5.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
-
     implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
-
     implementation 'org.hibernate.validator:hibernate-validator:8.0.2.Final'
-
-    implementation 'net.sourceforge.tess4j:tess4j:5.15.0'
     implementation 'org.apache.commons:commons-lang3:3.18.0'
+    implementation 'net.sourceforge.tess4j:tess4j:5.15.0'
 
     // Lombok
-    compileOnly("org.projectlombok:lombok:1.18.36")
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    testCompileOnly 'org.projectlombok:lombok:1.18.36'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
 
-    // Lombok for tests
-    testCompileOnly("org.projectlombok:lombok:1.18.36")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
-
-    testImplementation 'org.mockito:mockito-core:5.15.2'
+    // Testing (Spring Boot brings JUnit Jupiter)
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'org.mockito:mockito-core'
-    // In-memory database for testing
+    testImplementation 'org.mockito:mockito-core:5.15.2'
     testImplementation 'com.h2database:h2'
-}
-
-tasks.withType(Test).configureEach {
-    useJUnitPlatform()
 }
 
 test {
     useJUnitPlatform()
+    // needed only for demos that reflect into java.util.HashMap
+    jvmArgs '--add-opens', 'java.base/java.util=ALL-UNNAMED'
 }
 
+// Spring Boot run task (instead of 'run')
+tasks.named('bootRun') {
+    jvmArgs '--add-opens', 'java.base/java.util=ALL-UNNAMED'
+}
+
+// Ensure any JavaExec task inherits the flag (useful for custom demos)
+tasks.withType(JavaExec).configureEach {
+    jvmArgs '--add-opens', 'java.base/java.util=ALL-UNNAMED'
+}
+
+// Custom task to run your HashMap internals demo (no need for 'application' plugin)
+tasks.register('hashMapDemo', JavaExec) {
+    group = 'demo'
+    description = 'Run HashMapInternalsDemo with --add-opens'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.code.research.hash.HashMapInternalsDemo'
+    jvmArgs '--add-opens', 'java.base/java.util=ALL-UNNAMED'
+}
