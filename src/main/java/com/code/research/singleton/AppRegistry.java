@@ -17,6 +17,7 @@ public enum AppRegistry {
     public void registerSetting(String key, String value) {
         settings.put(key, value);
     }
+
     public String getSetting(String key) {
         return settings.get(key);
     }
