@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ColorConverterMatcher {
+    public static int POINTER_SIZE = 255;
     // Matches "#RGB" or "#RRGGBB" (with or without leading '#'), capturing either 3 or 6 hex digits
     private static final Pattern HEX_PATTERN = Pattern.compile(
             "^#?(?:"
@@ -49,5 +50,10 @@ public class ColorConverterMatcher {
         System.out.println(hexToRgb("#F0ECE4")); // rgb(240, 236, 228)
         System.out.println(hexToRgb("FFF"));     // rgb(255, 255, 255)
         System.out.println(hexToRgb("#ABC"));    // rgb(170, 187, 204)
+        String hex = "#F0ECE4";
+        System.out.println("splt0: "+hex.substring(0,2));    // rgb(170, 187, 204)
+        System.out.println("splt1: "+hex.substring(1,3));    // rgb(170, 187, 204)
+        System.out.println("splt2: "+hex.substring(3,5));    // rgb(170, 187, 204)
+        System.out.println("splt3: "+hex.substring(5,hex.length()));    // rgb(170, 187, 204)
     }
 }
