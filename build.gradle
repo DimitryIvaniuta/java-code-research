@@ -38,7 +38,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
     testCompileOnly 'org.projectlombok:lombok:1.18.36'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
-
+    // Kafka
+    implementation 'org.springframework.kafka:spring-kafka'
     // Testing (Spring Boot brings JUnit Jupiter)
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mockito:mockito-core:5.15.2'
