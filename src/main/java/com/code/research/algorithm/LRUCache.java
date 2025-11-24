@@ -1,5 +1,6 @@
 package com.code.research.algorithm;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -49,6 +50,17 @@ public final class LRUCache {
         } finally {
             lock.writeLock().unlock();
         }
+    }
 
+    public int size() {
+        lock.readLock().lock();
+        try { return map.size(); }
+        finally { lock.readLock().unlock(); }
+    }
+
+    public boolean containsKey(int key) {
+        lock.readLock().lock();
+        try { return map.containsKey(key); }            // does NOT change recency
+        finally { lock.readLock().unlock(); }
     }
 }
