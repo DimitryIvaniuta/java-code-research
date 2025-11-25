@@ -12,8 +12,9 @@ public final class ValidParenthesesSimple {
                 case '(':
                 case '[':
                 case '{':
+                    // push open
                     st.push(c);
-                    break;           // push open
+                    break;
                 case ')':
                     if (st.isEmpty() || st.pop() != '(') return false;
                     break;
@@ -23,11 +24,13 @@ public final class ValidParenthesesSimple {
                 case '}':
                     if (st.isEmpty() || st.pop() != '{') return false;
                     break;
+                // only brackets allowed
                 default:
-                    return false;                                      // only brackets allowed
+                    return false;
             }
         }
-        return st.isEmpty();                                                // no unmatched opens
+        // no unmatched opens
+        return st.isEmpty();
     }
 
     // Return true if every opening bracket is closed by the same type in correct order
