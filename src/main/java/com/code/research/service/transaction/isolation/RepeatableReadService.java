@@ -1,7 +1,7 @@
 package com.code.research.service.transaction.isolation;
 
 import com.code.research.model.Account;
-import com.code.research.repository.AccountRepository;
+import com.code.research.springboot.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
