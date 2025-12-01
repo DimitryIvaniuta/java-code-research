@@ -3,10 +3,15 @@ package com.code.research.algorithm;
 public final class MaxSubarrayIndices {
     // Return [startIndex, endIndex] of the contiguous subarray with the maximum sum (Kadane with indices)
     public static int[] maxSubarrayRange(int[] a) {
-        int bestSum = a[0];                 // best sum found so far
-        int curSum = a[0];                 // current running sum
-        int bestL = 0, bestR = 0;           // best range [L..R]
-        int curL = 0;                      // start index of current running sum
+        // best sum found so far
+        int bestSum = a[0];
+        // current running sum
+        int curSum = a[0];
+        // best range [L..R]
+        int bestL = 0;
+        int bestR = 0;
+        // start index of current running sum
+        int curL = 0;
 
         for (int i = 1; i < a.length; i++) {
             // If starting fresh at i is better than extending, reset curSum/curL
@@ -16,7 +21,6 @@ public final class MaxSubarrayIndices {
             } else {
                 curSum += a[i];
             }
-
             // Update global best if current beats it
             if (curSum > bestSum) {
                 bestSum = curSum;
@@ -24,17 +28,19 @@ public final class MaxSubarrayIndices {
                 bestR = i;
             }
         }
-        return new int[]{bestL, bestR};     // indices (inclusive)
+        // indices (inclusive)
+        return new int[]{bestL, bestR};
     }
 
     // Optional helper: also return the sum
     public static int maxSubarraySum(int[] a) {
-        int best = a[0], cur = a[0];
+        int bestSum = a[0];
+        int curSum = a[0];
         for (int i = 1; i < a.length; i++) {
-            cur = Math.max(a[i], cur + a[i]);
-            best = Math.max(best, cur);
+            curSum = Math.max(a[i], a[i] + curSum);
+            bestSum = Math.max(bestSum, curSum);
         }
-        return best;
+        return bestSum;
     }
 
     // tiny demo
