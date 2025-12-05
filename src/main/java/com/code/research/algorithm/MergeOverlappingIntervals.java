@@ -11,8 +11,9 @@ public class MergeOverlappingIntervals {
         }
 
         // 1) Sort by start
+        System.out.println("Before Sort: " + Arrays.deepToString(intervals));
         Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
-
+        System.out.println("After Sort: " + Arrays.deepToString(intervals));
         // 2) Merge in-place
         int idx = 0; // last merged interval index
         for (int i = 1; i < intervals.length; i++) {
@@ -21,11 +22,14 @@ public class MergeOverlappingIntervals {
 
             // Overlap OR touching: [a,b] and [c,d] with c <= b
             if (curr[0] <= last[1]) {
+                System.out.printf(" Cur[0]: %d : Last[1]: %d ::\n", curr[0], last[1]);
                 last[1] = Math.max(last[1], curr[1]); // extend end
+                System.out.printf("Last[0]: %d | Last[1]: %d |\n", last[0], last[1]);
             } else {
                 // No overlap: move forward and copy
                 idx++;
                 intervals[idx] = curr;
+                System.out.printf("Cur[0]: %d | Cur[1]: %d |\n", curr[0], curr[1]);
             }
         }
 
