@@ -10,6 +10,22 @@ public final class BestTimeToBuySellStock {
         // scan each day's price
         for (int p : prices) {
             // update best buy price
+            min = Math.min(min, p);
+            // profit if we sell today
+            // keep the max profit
+            best = Math.max(best, p - min);
+        }
+        // 0 if never profitable
+        return best;
+    }
+    public static int maxProfit2(int[] prices) {
+        // lowest price seen so far (best buy)
+        int min = Integer.MAX_VALUE;
+        // best profit so far
+        int best = 0;
+        // scan each day's price
+        for (int p : prices) {
+            // update best buy price
             if (p < min) {
                 min = p;
             }
