@@ -1,7 +1,6 @@
 package com.code.research.service.reserveorder;
 
-public record ReserveOrderResponse(
-        String orderId,
-        String status
-) {
+import java.time.Instant;
+
+public record ReserveOrderResponse(String orderId, String status, Instant reservedUntil) {
 }

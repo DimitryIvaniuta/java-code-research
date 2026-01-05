@@ -1,6 +1,5 @@
 package com.code.research.service.reserveorder;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
@@ -12,7 +11,6 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Service
@@ -202,34 +200,5 @@ public class ReserveService {
         NEWLY_CLAIMED,
         IN_PROGRESS,
         ALREADY_COMPLETED
-    }
-
-    private record IdemMeta(String status, Integer httpStatus) {
-    }
-
-    // -------------------------
-    // DTOs (example shape)
-    // -------------------------
-
-    public record ReserveOrderRequest(String orderId) {
-    }
-
-    public record ReserveOrderResponse(String orderId, String status, Instant reservedUntil) {
-    }
-
-    // -------------------------
-    // Exceptions (map to 404 / 409 in controller advice)
-    // -------------------------
-
-    public static class OrderNotFoundException extends RuntimeException {
-        public OrderNotFoundException(String orderId) {
-            super("Order not found: " + orderId);
-        }
-    }
-
-    public static class RequestInProgressException extends RuntimeException {
-        public RequestInProgressException(String key) {
-            super("Request with this Idempotency-Key is in progress: " + key);
-        }
     }
 }
